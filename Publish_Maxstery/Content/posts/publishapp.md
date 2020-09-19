@@ -19,3 +19,33 @@ In case of any issue with the app, feel free to contact me at:
 
 Don't worry, be pathient!
 
+
+```swift
+
+class ActivityViewController: UIViewController {
+    private let activity: Activity
+    ...
+
+    override func viewDidLoad() {
+        let startButton = UIButton(type: .system)
+        
+        startButton.addTarget(self,
+            action: #selector(startActivity),
+            for: .touchUpInside
+        )
+        
+        startButton.setImage(UIImage(
+            systemName: "play.circle.fill"
+        ), for: .normal)
+        
+        startButton.setTitle("Start", for: .normal)
+        view.addSubview(startButton)
+        ...
+    }
+    
+    @objc private func startActivity() {
+        activity.start()
+    }
+}
+
+```
