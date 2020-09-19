@@ -1,1 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>PublishMaxstery</title><description>A description of PublishMaxstery</description><link>https://your-website-url.com</link><language>en</language><lastBuildDate>Mon, 7 Sep 2020 17:44:03 -0500</lastBuildDate><pubDate>Mon, 7 Sep 2020 17:44:03 -0500</pubDate><ttl>250</ttl><atom:link href="https://your-website-url.com/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://your-website-url.com/posts/publishapp</guid><title>Pathience App</title><description>Pathience App</description><link>https://your-website-url.com/posts/publishapp</link><pubDate>Sun, 6 Sep 2020 20:42:00 -0500</pubDate><content:encoded><![CDATA[<h1>Pathience App</h1><h2><img src="https://your-website-url.com/images/icon-iPad83@2x.png" alt="icon-iPad83@2x"/></h2><h2>Pathience = Path to Patience</h2><p>Pathience is an app that helps people to track important dates. Dates could be in the past or in the future. Pathience will show you exactly how much time is remaining for your due date or since when you have been waiting. This app is ideal for the people that constantly try to track time, people that its trying to create the habit of pathience and people that have specific goals in life.</p><p>In case of any issue with the app, feel free to contact me at:</p><p><a href="https://twitter.com/_rubenmaldonado">@_rubenmaldonado</a></p><p>Don't worry, be pathient!</p>]]></content:encoded></item></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>Ruben Maldonado Apps</title><description>Hub for my iOS development Journey</description><link>https://RubenMaldonado.github.io</link><language>en</language><lastBuildDate>Fri, 18 Sep 2020 22:17:17 -0500</lastBuildDate><pubDate>Fri, 18 Sep 2020 22:17:17 -0500</pubDate><ttl>250</ttl><atom:link href="https://RubenMaldonado.github.io/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://RubenMaldonado.github.io/posts/publishapp</guid><title>Pathience App</title><description>Pathience App</description><link>https://RubenMaldonado.github.io/posts/publishapp</link><pubDate>Sun, 6 Sep 2020 20:42:00 -0500</pubDate><content:encoded><![CDATA[<h1>Pathience App</h1><h2><img src="https://RubenMaldonado.github.io/images/icon-iPad83@2x.png" alt="icon-iPad83@2x"/></h2><h2>Pathience = Path to Patience</h2><p>Pathience is an app that helps people to track important dates. Dates could be in the past or in the future. Pathience will show you exactly how much time is remaining for your due date or since when you have been waiting. This app is ideal for the people that constantly try to track time, people that its trying to create the habit of pathience and people that have specific goals in life.</p><p>In case of any issue with the app, feel free to contact me at:</p><p><a href="https://twitter.com/_rubenmaldonado">@_rubenmaldonado</a></p><p>Don't worry, be pathient!</p><pre><code>
+
+<span class="keyword">class</span> ActivityViewController: <span class="type">UIViewController</span> {
+    <span class="keyword">private let</span> activity: <span class="type">Activity</span>
+    ...
+
+    <span class="keyword">override func</span> viewDidLoad() {
+        <span class="keyword">let</span> startButton = <span class="type">UIButton</span>(type: .<span class="dotAccess">system</span>)
+        
+        startButton.<span class="call">addTarget</span>(<span class="keyword">self</span>,
+            action: <span class="keyword">#selector</span>(startActivity),
+            for: .<span class="dotAccess">touchUpInside</span>
+        )
+        
+        startButton.<span class="call">setImage</span>(<span class="type">UIImage</span>(
+            systemName: <span class="string">"play.circle.fill"</span>
+        ), for: .<span class="dotAccess">normal</span>)
+        
+        startButton.<span class="call">setTitle</span>(<span class="string">"Start"</span>, for: .<span class="dotAccess">normal</span>)
+        view.<span class="call">addSubview</span>(startButton)
+        ...
+    }
+    
+    <span class="keyword">@objc private func</span> startActivity() {
+        activity.<span class="call">start</span>()
+    }
+}
+
+</code></pre>]]></content:encoded></item></channel></rss>
