@@ -142,7 +142,7 @@ Getting all these steps was complicated for me, before trying this I didn't know
 
 Feel free to contact me at ruben@maldonadotena.com or by messages in twitter [@_rubenmaldonado](https://twitter.com/_rubenmaldonado)
 
-Don't worry, be [pathient](https://rubenmaldonado.github.io/posts/20200910_pathience_appdescription/)!
+Don't worry, be [pathient](https://rubenmaldonado.github.io/apps/pathience-app/)!
 
 
 
