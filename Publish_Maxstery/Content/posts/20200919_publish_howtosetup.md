@@ -68,6 +68,8 @@ Command overview:
 - "publish generate" command will transform your markdown text files and generate the static html content for your site, your output.
 - "publish run" command will create a local server where you can pre-visualize your content, just open http://localhost:8000 in your web browser.
 
+The result will be an starter website like this:
+![localhost](/images/20200919_publish_howtosetup_01_localhost.png)
 
 
 ## Step 4: Prepare for deployment to github pages
