@@ -30,7 +30,4 @@ try PublishMaxstery().publish(withTheme: .maxstery,
                               plugins: [
                                 .splash(withClassPrefix: "")
                               ]
-                              //deployedUsing: .gitHub("RubenMaldonado/publish_maxstery_prod"),
 )
-
-

@@ -1,5 +1,5 @@
 ---
-date: 2020-09-06 20:42
+date: 2020-09-10 20:42
 description: Pathience App
 tags: app,maxstery,pathience
 ---
@@ -18,34 +18,3 @@ In case of any issue with the app, feel free to contact me at:
 [@_rubenmaldonado](https://twitter.com/_rubenmaldonado)
 
 Don't worry, be pathient!
-
-
-```swift
-
-class ActivityViewController: UIViewController {
-    private let activity: Activity
-    ...
-
-    override func viewDidLoad() {
-        let startButton = UIButton(type: .system)
-        
-        startButton.addTarget(self,
-            action: #selector(startActivity),
-            for: .touchUpInside
-        )
-        
-        startButton.setImage(UIImage(
-            systemName: "play.circle.fill"
-        ), for: .normal)
-        
-        startButton.setTitle("Start", for: .normal)
-        view.addSubview(startButton)
-        ...
-    }
-    
-    @objc private func startActivity() {
-        activity.start()
-    }
-}
-
-```
