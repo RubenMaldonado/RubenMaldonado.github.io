@@ -233,3 +233,11 @@ pre code .preprocessing {
 /**
  Custom Code
  */
+img {
+    /* position: absolute; */
+    top: 50%;
+    left: 50%;
+    /* transform: translateX(-50%) translateY(-50%); */
+    max-width: 100%;
+    max-height: 100%;
+}
