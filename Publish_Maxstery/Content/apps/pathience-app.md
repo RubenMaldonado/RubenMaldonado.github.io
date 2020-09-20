@@ -1,7 +1,7 @@
 ---
 date: 2020-09-10 20:42
 description: Pathience App
-tags: app,maxstery,pathience
+tags: apps,maxstery,pathience
 ---
 
 
