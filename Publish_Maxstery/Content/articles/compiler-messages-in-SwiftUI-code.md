@@ -24,5 +24,8 @@ Some examples are:
 #warning("TODO: .constant Binding to enable the preview")
 #warning("TODO: Create a Model object to reduce complexity")
 
-Hope t
+Hope you find this useful.
+
+Don't worry, be [pathient](https://rubenmaldonado.github.io/apps/pathience-app/)!
+
 
