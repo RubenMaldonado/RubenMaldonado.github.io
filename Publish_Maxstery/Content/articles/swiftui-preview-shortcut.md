@@ -1,7 +1,7 @@
 ---
 date: 2020-09-22 22:00
 description: Resume SwiftUI Preview with the Keyboard
-tags: code snippet,swift,keyboard shortcut
+tags: code snippet,swift,keyboard shortcut, productivity
 ---
 
 # Resume SwiftUI Preview with the Keyboard
