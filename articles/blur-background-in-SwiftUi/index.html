@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="og:site_name" content="Ruben Maldonado"/><link rel="canonical" href="https://RubenMaldonado.github.io/articles/blur-background-in-SwiftUi"/><meta name="twitter:url" content="https://RubenMaldonado.github.io/articles/blur-background-in-SwiftUi"/><meta name="og:url" content="https://RubenMaldonado.github.io/articles/blur-background-in-SwiftUi"/><title>Blur background with SwiftUI | Ruben Maldonado</title><meta name="twitter:title" content="Blur background with SwiftUI | Ruben Maldonado"/><meta name="og:title" content="Blur background with SwiftUI | Ruben Maldonado"/><meta name="description" content="Blur background with SwiftUI"/><meta name="twitter:description" content="Blur background with SwiftUI"/><meta name="og:description" content="Blur background with SwiftUI"/><meta name="twitter:card" content="summary"/><link rel="stylesheet" href="/styles.css" type="text/css"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link rel="shortcut icon" href="/images/favicon.png" type="image/png"/><link rel="alternate" href="/feed.rss" type="application/rss+xml" title="Subscribe to Ruben Maldonado"/></head><body class="item-page"><header><div class="wrapper"><a class="site-name" href="/">Ruben Maldonado</a><nav><ul><li><a href="/apps">Apps</a></li><li><a class="selected" href="/articles">Articles</a></li></ul></nav></div></header><div class="wrapper"><article><div class="content"><h1>Blur background with SwiftUI</h1><p>For the moment SwiftUI doesnt provide a native way to create blur effect, and depending on your target it could be difficult to do. After some research in the topic, the simplest way that I found was inside of the code shared by apple itself. here you have the implementation for both iOS and macOS.</p><h2>iOS Implementation</h2><pre><code><span class="keyword">import</span> SwiftUI
+
+<span class="comment">// MARK: - VisualEffectBlur</span>
+
+<span class="keyword">struct</span> VisualEffectBlur&lt;Content: <span class="type">View</span>&gt;: <span class="type">View</span> {
+    <span class="keyword">var</span> blurStyle: <span class="type">UIBlurEffect</span>.<span class="type">Style</span>
+    <span class="keyword">var</span> vibrancyStyle: <span class="type">UIVibrancyEffectStyle</span>?
+    <span class="keyword">var</span> content: <span class="type">Content</span>
+    
+    <span class="keyword">init</span>(blurStyle: <span class="type">UIBlurEffect</span>.<span class="type">Style</span> = .<span class="dotAccess">systemMaterial</span>, vibrancyStyle: <span class="type">UIVibrancyEffectStyle</span>? = <span class="keyword">nil</span>, <span class="keyword">@ViewBuilder</span> content: () -&gt; <span class="type">Content</span>) {
+        <span class="keyword">self</span>.<span class="property">blurStyle</span> = blurStyle
+        <span class="keyword">self</span>.<span class="property">vibrancyStyle</span> = vibrancyStyle
+        <span class="keyword">self</span>.<span class="property">content</span> = <span class="call">content</span>()
+    }
+    
+    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="type">View</span> {
+        <span class="type">Representable</span>(blurStyle: blurStyle, vibrancyStyle: vibrancyStyle, content: <span class="type">ZStack</span> { content })
+            .<span class="call">accessibility</span>(hidden: <span class="type">Content</span>.<span class="keyword">self</span> == <span class="type">EmptyView</span>.<span class="keyword">self</span>)
+    }
+}
+
+<span class="comment">// MARK: - Representable</span>
+
+<span class="keyword">extension</span> <span class="type">VisualEffectBlur</span> {
+    <span class="keyword">struct</span> Representable&lt;Content: <span class="type">View</span>&gt;: <span class="type">UIViewRepresentable</span> {
+        <span class="keyword">var</span> blurStyle: <span class="type">UIBlurEffect</span>.<span class="type">Style</span>
+        <span class="keyword">var</span> vibrancyStyle: <span class="type">UIVibrancyEffectStyle</span>?
+        <span class="keyword">var</span> content: <span class="type">Content</span>
+        
+        <span class="keyword">func</span> makeUIView(context: <span class="type">Context</span>) -&gt; <span class="type">UIVisualEffectView</span> {
+            context.<span class="property">coordinator</span>.<span class="property">blurView</span>
+        }
+        
+        <span class="keyword">func</span> updateUIView(<span class="keyword">_</span> view: <span class="type">UIVisualEffectView</span>, context: <span class="type">Context</span>) {
+            context.<span class="property">coordinator</span>.<span class="call">update</span>(content: content, blurStyle: blurStyle, vibrancyStyle: vibrancyStyle)
+        }
+        
+        <span class="keyword">func</span> makeCoordinator() -&gt; <span class="type">Coordinator</span> {
+            <span class="type">Coordinator</span>(content: content)
+        }
+    }
+}
+
+<span class="comment">// MARK: - Coordinator</span>
+
+<span class="keyword">extension</span> <span class="type">VisualEffectBlur</span>.<span class="type">Representable</span> {
+    <span class="keyword">class</span> Coordinator {
+        <span class="keyword">let</span> blurView = <span class="type">UIVisualEffectView</span>()
+        <span class="keyword">let</span> vibrancyView = <span class="type">UIVisualEffectView</span>()
+        <span class="keyword">let</span> hostingController: <span class="type">UIHostingController</span>&lt;<span class="type">Content</span>&gt;
+        
+        <span class="keyword">init</span>(content: <span class="type">Content</span>) {
+            hostingController = <span class="type">UIHostingController</span>(rootView: content)
+            hostingController.<span class="property">view</span>.<span class="property">autoresizingMask</span> = [.<span class="dotAccess">flexibleWidth</span>, .<span class="dotAccess">flexibleHeight</span>]
+            hostingController.<span class="property">view</span>.<span class="property">backgroundColor</span> = <span class="keyword">nil</span>
+            blurView.<span class="property">contentView</span>.<span class="call">addSubview</span>(vibrancyView)
+            blurView.<span class="property">autoresizingMask</span> = [.<span class="dotAccess">flexibleWidth</span>, .<span class="dotAccess">flexibleHeight</span>]
+            vibrancyView.<span class="property">contentView</span>.<span class="call">addSubview</span>(hostingController.<span class="property">view</span>)
+            vibrancyView.<span class="property">autoresizingMask</span> = [.<span class="dotAccess">flexibleWidth</span>, .<span class="dotAccess">flexibleHeight</span>]
+        }
+        
+        <span class="keyword">func</span> update(content: <span class="type">Content</span>, blurStyle: <span class="type">UIBlurEffect</span>.<span class="type">Style</span>, vibrancyStyle: <span class="type">UIVibrancyEffectStyle</span>?) {
+            hostingController.<span class="property">rootView</span> = content
+            <span class="keyword">let</span> blurEffect = <span class="type">UIBlurEffect</span>(style: blurStyle)
+            blurView.<span class="property">effect</span> = blurEffect
+            <span class="keyword">if let</span> vibrancyStyle = vibrancyStyle {
+                vibrancyView.<span class="property">effect</span> = <span class="type">UIVibrancyEffect</span>(blurEffect: blurEffect, style: vibrancyStyle)
+            } <span class="keyword">else</span> {
+                vibrancyView.<span class="property">effect</span> = <span class="keyword">nil</span>
+            }
+            hostingController.<span class="property">view</span>.<span class="call">setNeedsDisplay</span>()
+        }
+    }
+}
+
+<span class="comment">// MARK: - Content-less Initializer</span>
+
+<span class="keyword">extension</span> <span class="type">VisualEffectBlur</span> <span class="keyword">where</span> <span class="type">Content</span> == <span class="type">EmptyView</span> {
+    <span class="keyword">init</span>(blurStyle: <span class="type">UIBlurEffect</span>.<span class="type">Style</span> = .<span class="dotAccess">systemMaterial</span>) {
+        <span class="keyword">self</span>.<span class="keyword">init</span>( blurStyle: blurStyle, vibrancyStyle: <span class="keyword">nil</span>) {
+            <span class="type">EmptyView</span>()
+        }
+    }
+}
+
+<span class="comment">// MARK: - Previews</span>
+
+<span class="keyword">struct</span> VisualEffectBlur_Previews: <span class="type">PreviewProvider</span> {
+    <span class="keyword">static var</span> previews: <span class="keyword">some</span> <span class="type">View</span> {
+        <span class="type">ZStack</span> {
+            <span class="type">LinearGradient</span>(
+                gradient: <span class="type">Gradient</span>(colors: [.<span class="dotAccess">red</span>, .<span class="dotAccess">blue</span>]),
+                startPoint: .<span class="dotAccess">topLeading</span>,
+                endPoint: .<span class="dotAccess">bottomTrailing</span>
+            )
+            
+            <span class="type">VisualEffectBlur</span>(blurStyle: .<span class="dotAccess">systemUltraThinMaterial</span>, vibrancyStyle: .<span class="dotAccess">fill</span>) {
+                <span class="type">Text</span>(<span class="string">"Hello World!"</span>)
+                    .<span class="call">frame</span>(width: <span class="number">200</span>, height: <span class="number">100</span>)
+            }
+        }
+        .<span class="call">previewLayout</span>(.<span class="dotAccess">sizeThatFits</span>)
+    }
+}
+
+
+</code></pre><h2>macOS Implementation</h2><pre><code><span class="comment">/*
+See LICENSE folder for this sample’s licensing information.
+
+Abstract:
+The macOS implementation of a NSVisualEffectView's blur.
+*/</span>
+
+<span class="keyword">import</span> SwiftUI
+
+<span class="comment">// MARK: - VisualEffectBlur</span>
+
+<span class="keyword">struct</span> VisualEffectBlur: <span class="type">View</span> {
+    <span class="keyword">var</span> material: <span class="type">NSVisualEffectView</span>.<span class="type">Material</span>
+    
+    <span class="keyword">init</span>(material: <span class="type">NSVisualEffectView</span>.<span class="type">Material</span> = .<span class="dotAccess">headerView</span>) {
+        <span class="keyword">self</span>.<span class="property">material</span> = material
+    }
+    
+    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="type">View</span> {
+        <span class="type">Representable</span>(material: material)
+            .<span class="call">accessibility</span>(hidden: <span class="keyword">true</span>)
+    }
+}
+
+<span class="comment">// MARK: - Representable</span>
+
+<span class="keyword">extension</span> <span class="type">VisualEffectBlur</span> {
+    <span class="keyword">struct</span> Representable: <span class="type">NSViewRepresentable</span> {
+        <span class="keyword">var</span> material: <span class="type">NSVisualEffectView</span>.<span class="type">Material</span>
+        
+        <span class="keyword">func</span> makeNSView(context: <span class="type">Context</span>) -&gt; <span class="type">NSVisualEffectView</span> {
+            context.<span class="property">coordinator</span>.<span class="property">visualEffectView</span>
+        }
+        
+        <span class="keyword">func</span> updateNSView(<span class="keyword">_</span> view: <span class="type">NSVisualEffectView</span>, context: <span class="type">Context</span>) {
+            context.<span class="property">coordinator</span>.<span class="call">update</span>(material: material)
+        }
+        
+        <span class="keyword">func</span> makeCoordinator() -&gt; <span class="type">Coordinator</span> {
+            <span class="type">Coordinator</span>()
+        }
+    }
+    
+    <span class="keyword">class</span> Coordinator {
+        <span class="keyword">let</span> visualEffectView = <span class="type">NSVisualEffectView</span>()
+        
+        <span class="keyword">init</span>() {
+            visualEffectView.<span class="property">blendingMode</span> = .<span class="dotAccess">withinWindow</span>
+        }
+        
+        <span class="keyword">func</span> update(material: <span class="type">NSVisualEffectView</span>.<span class="type">Material</span>) {
+            visualEffectView.<span class="property">material</span> = material
+        }
+    }
+}
+
+<span class="comment">// MARK: - Previews</span>
+
+<span class="keyword">struct</span> VisualEffectView_Previews: <span class="type">PreviewProvider</span> {
+    <span class="keyword">static var</span> previews: <span class="keyword">some</span> <span class="type">View</span> {
+        <span class="type">ZStack</span> {
+            <span class="type">LinearGradient</span>(gradient: <span class="type">Gradient</span>(colors: [.<span class="dotAccess">red</span>, .<span class="dotAccess">blue</span>]), startPoint: .<span class="dotAccess">topLeading</span>, endPoint: .<span class="dotAccess">bottomTrailing</span>)
+            
+            <span class="type">VisualEffectBlur</span>()
+                .<span class="call">padding</span>()
+            
+            <span class="type">Text</span>(<span class="string">"Hello World!"</span>)
+        }
+        .<span class="call">frame</span>(width: <span class="number">200</span>, height: <span class="number">100</span>)
+        .<span class="call">previewLayout</span>(.<span class="dotAccess">sizeThatFits</span>)
+    }
+}
+
+
+</code></pre><p>Don't worry, be <a href="https://rubenmaldonado.github.io/apps/pathience-app/">pathient</a>!</p></div><span>Tagged with: </span><ul class="tag-list"><li><a href="/tags/code-snippet">code snippet</a></li><li><a href="/tags/swiftui">swiftui</a></li></ul></article></div><footer><p>Generated using <a href="https://github.com/johnsundell/publish">Publish</a></p><p><a href="/feed.rss">RSS feed</a></p></footer></body></html>
